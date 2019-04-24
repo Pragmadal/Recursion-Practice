@@ -35,9 +35,7 @@ public class sak66330_a16 {
     public static void printArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++)
-                if (array[i][j] != 0) {
-                    System.out.print(i + " " + j + " " + array[i][j] + "\n");
-                }
+                if (array[i][j] != 0) System.out.print(i + " " + j + " " + array[i][j] + "\n");
         }
     }
 }
