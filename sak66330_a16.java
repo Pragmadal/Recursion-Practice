@@ -1,4 +1,5 @@
 import java.util.Scanner; // Importing the Scanner class for user inputs
+import java.math.BigInteger;
 
 public class sak66330_a16 { // Main class
     static int callCount1 = -1, callCount2 = -1; // Class variables to count the number of recursive calls in related methods, they start at -1 to counter the initial call.
@@ -16,35 +17,28 @@ public class sak66330_a16 { // Main class
 	}
 
         array = new int[n+1][k+1]; // Assign the array lengths depending on the user inputs, they are +1 to counter the effect of the indexes starting at 0
-
-	System.out.print("-_-_-_-_-_-_-_-_-_-_-| Binomial-Coefficient | Recursive Calls\n" +
+	
+	System.out.print("-_-_-_-_-_-_-_-_-_-_-| Binomial-Coefficient | Recursive Calls\n" + // Fancy print-out for the values and call numbers
 			 "With Loops           | " + coefficients1(n, k) + " | 0\n" +
 			 "With Recursion       | " + coefficients2(n, k) + " | " + callCount1 + "\n" +
 			 "With Recursion/Array | " + coefficients3(n, k, array) + " | " + callCount2 + "\n" +
 			 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n");
     }
 
-    public static int coefficients1(int n, int k) { // First method which uses loops
-	int numer = 0, denom1 = 0, denom2 = 0; // Variables used for the final calculation, each represent a different factorial calculation
+    public static BigInteger coefficients1(int n, int k) { // First method which uses loops
+	BigInteger numer = BigInteger.valueOf(n), denom1 = BigInteger.valueOf(k), denom2 = BigInteger.valueOf(n - k); // Objects used for the final calculation, each represent a different factorial calculation
+	for (int i = 0; i < n; i++) // A loop to calculate the factorial of n
+		if (i > 0) numer = numer.multiply(BigInteger.valueOf(n - i)); // The value gets multiplied by a number incrementally less than n	
 
-	for (int i = 0; i < n; i++) { // A loop to calculate the factorial of n
-		if (i == 0) numer = n; // If it's the first loop the initial value is retained
-		if (i > 0) numer *= n - i; // On other loops the value gets multiplied by a number incrementally less than n
-	}	
+	for (int i = 0; i < k; i++) // A loop to calculate the factorial of k
+		if (i > 0) denom1 = denom1.multiply(BigInteger.valueOf(k - i)); // On other loops the value gets multiplied by a number incrementally less than k	
 
-	for (int i = 0; i < k; i++) { // A loop to calculate the factorial of k
-		if (i == 0) denom1 = k; // If it's the first loop the initial value is retained
-		if (i > 0) denom1 *= k - i; // On other loops the value gets multiplied by a number incrementally less than k
-	}	
-
-	for (int i = 0; i < n - k; i++) { // A loop to calculate the factorial of (n - k)
-		if (i == 0) denom2 = n - k; // If it's the first loop the initial value is retained
-		if (i > 0) denom2 *= n - k - i; // On other loops the value gets multiplied by a number incrementally less than (n - k)
-	}
+	for (int i = 0; i < n - k; i++) // A loop to calculate the factorial of (n - k)
+		if (i > 0) denom2 = denom2.multiply(BigInteger.valueOf(n - k - i)); // On other loops the value gets multiplied by a number incrementally less than (n - k)
 	
-	if (n == k || k == 0) return 1; // The coefficient will be 1 if either of those conditions are mete
-	else if (n < k) return 0; // If n is less than k then the coefficient is 0
-	else return numer / (denom1 * denom2); // Otherwise, this calculation finds the coefficient
+	if (n == k || k == 0) return BigInteger.ONE; // The coefficient will be 1 if either of those conditions are met
+	else if (n < k) return BigInteger.ZERO; // If n is less than k then the coefficient is 0
+	else return numer.divide(denom1.multiply(denom2)); //numer / (denom1 * denom2); // Otherwise, this calculation finds the coefficient
     }
     
      public static int coefficients2(int n, int k) { // Second method which uses pure recursion
